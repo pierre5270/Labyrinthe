@@ -18,6 +18,7 @@ class labyrinthe: public block{
             grid = new block[size] ;
             h_wall = new bool[size+w] ;
             v_wall = new bool[size+w] ;
+            
             for(int i =0 ; i<size+w; i++){
                 this->h_wall[i] = false ;
                 this->v_wall[i] = false ;

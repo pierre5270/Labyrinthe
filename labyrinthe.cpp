@@ -20,30 +20,25 @@ bool labyrinthe::getV_wall(int i, int j) const
     return v_wall[j * width + i];
 }
 
-string labyrinthe::v_obstacle(bool b) const
-{
-    return !b ? "|" : "";
-}
-
-string labyrinthe::h_obstacle(bool b) const
-{
-    return !b ? "_" : "";
-}
 
 string labyrinthe::toString() const{
 
     ostringstream ss;
     ss << "Labyrinthe :" << endl;
     ss << endl ;
-    for (int i = 0; i < width; i++)
-    {
-
-        for (int j = 0; j < width; j++)
-        {
-            ss << setw(2) << getGrid(i, j) << " ";
+    for (int i = 0; i < width; i++){
+        for (int j = 0; j < width; j++){
+            ss << setw(2) << getGrid(i,j) << " ";
         }
         ss << endl ;
     }
+    ss << endl ;
+
+    ss << "horizontal wall :"<< endl ;
+    draw_check_box(ss,h_wall) ;
+    ss << endl ;
+    ss << "vertical wall :"<< endl ;
+    draw_check_box(ss,v_wall) ;
 
     return ss.str();
 }

@@ -38,11 +38,16 @@ class labyrinthe: public block{
     //Rôle : retourne le résultat à l'indice indiquée
     bool getV_wall(int i, int j) const ;
 
-    //Rôle : dessine un mur vertical
-    string v_obstacle(bool b) const ;
+    template<typename T>
+    void draw_check_box(ostringstream &ss,T* box) const {
 
-    //Rôle : dessine un mur horizontal
-    string h_obstacle(bool b) const ;
+        for (int i = 0; i < width; i++){
+            for (int j = 0; j < width; j++){
+                ss << setw(2) << to_string(box[width*j+i]) << " ";
+        }
+        ss << endl ;
+        }
+    }
 
     //Rôle : dessine le labyrinthe sur la sortie standard
     string toString()const ;

@@ -13,7 +13,7 @@ class block{
     public :
 
         block(){}
-        
+
         block(int v ):value(v){
             visited = false ;
             neighboor = {} ;
@@ -52,5 +52,7 @@ class block{
         friend ostream &operator<<(ostream &f , block b){
             return f << b.toString() ;
         }
+
+        
 
 } ;

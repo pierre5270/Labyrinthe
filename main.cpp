@@ -4,6 +4,7 @@ int main (){
 
     labyrinthe l (5) ;
     l.init_labyrinthe() ;
+    cout << l << endl ;
     /*
     block b = block(5) ;
     b.setNeighboor(2,1) ;

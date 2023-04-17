@@ -1,20 +1,21 @@
-#include <iostream>
-#include <sstream>
-#include <cstring>
+#pragma once
+#include "edge.hpp"
 #include <cassert>
-#include <cstdlib>
 #include <vector>
-
 using namespace std ;
 
 class block{
     protected :
         int value ;
-        vector<int> neighboor ;
+        vector<edge> neighboor ;
 
     public :
 
-        block(int v ):value(v), neighboor(vector<int>(4)){} ;
+        block(int v ):value(v){
+            
+            neighboor = {} ;
+            
+        } 
 
         //Rôle : Cette fonction a pour but de retourner la valeur du bloc
         int getValue ()const ;
@@ -23,7 +24,7 @@ class block{
         void setValue(int v) ;
 
         //Rôle : Cette fonction retourne la liste des voisins du bloc
-        vector<int> getNeighboor()const ;
+        vector<edge> getNeighboor()const ;
 
         //Rôle : Cette fonction ajoute un élément à la liste des voisins d'un bloc
         // à noter que :

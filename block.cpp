@@ -18,6 +18,14 @@ void block::setNeighboor(int n,int position=0){
     neighboor.push_back(edge(this->getValue(),n)) ;
 }
 
+bool block :: getVisited()const {
+    return visited ;
+}
+
+void block::setVisited() {
+    visited = !visited ;
+}
+
 string block::toString()const {
     ostringstream ss ;
     ss << "block value = "<< to_string(getValue())<< endl ;

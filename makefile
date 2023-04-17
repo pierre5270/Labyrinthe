@@ -3,7 +3,7 @@ LDFLAGS =  # les options pour l'éditeur de liens
 
 CC = g++ # le compilateur à utiliser
 
-SRC = main.cpp block.cpp edge.cpp # les fichiers sources
+SRC = main.cpp labyrinthe.cpp block.cpp edge.cpp # les fichiers sources
 PROG = main   # nom de l'exécutable
 OBJS = $(SRC:.cpp=.o) # les .o qui en découlent
 .SUFFIXES: .cpp .o    # lien entre les suffixes
@@ -14,7 +14,8 @@ all: $(PROG)
 $(PROG): $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-main.cpp : block.hpp 
+main.cpp : labyrinthe.hpp
+labyrinthe.cpp : labyrinthe.hpp block.hpp
 block.cpp : block.hpp edge.hpp
 edge.cpp : edge.hpp
 # le lien entre .o et -c

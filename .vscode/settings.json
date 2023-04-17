@@ -1,5 +1,12 @@
 {
     "files.associations": {
         "ostream": "cpp"
-    }
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/pierre/Bureau/ELEC4/C++/Projet_COO/Labyrinthe",
+            "binaryPath": "/home/pierre/Bureau/ELEC4/C++/Projet_COO/Labyrinthe/main",
+            "binaryArgs": []
+        }
+    ]
 }

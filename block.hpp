@@ -7,12 +7,15 @@ using namespace std ;
 class block{
     protected :
         int value ;
+        bool visited ;
         vector<edge> neighboor ;
 
     public :
 
+        block(){}
+        
         block(int v ):value(v){
-            
+            visited = false ;
             neighboor = {} ;
             
         } 
@@ -34,6 +37,13 @@ class block{
          *3 : côté Nord
         */
         void setNeighboor(int n,int position) ;
+
+
+        //Rôle : retourne true si la case a été visitée
+        bool getVisited()const ;
+
+        //Rôle : change la valeur de la case pour signaler qu'on l'a parcouru
+        void setVisited() ;
 
         //Rôle : retourner sous forme de chaîne de caractères l'expression du block
         string toString() const ;

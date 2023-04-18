@@ -6,6 +6,7 @@ using namespace std ;
 
 class block{
     protected :
+        int ID ;
         int value ;
         bool visited ;
         vector<edge> neighboor ;
@@ -14,7 +15,8 @@ class block{
 
         block(){}
 
-        block(int v ):value(v){
+        block(int v ,int i):value(v){
+            ID = i ;
             visited = false ;
             neighboor = {} ;
             
@@ -23,8 +25,20 @@ class block{
         //Rôle : Cette fonction a pour but de retourner la valeur du bloc
         int getValue ()const ;
 
+        //Rôle : identinfiant du bloc
+        int getID()const ;
+
+        //Rôle : retourne true si la case a été visitée
+        bool getVisited()const ;
+
         //Rôle : Cette fonction attribue une valeur au bloc désigné
         void setValue(int v) ;
+
+        //Rôle : Modifier l'identifiant du bloc
+        void setID(int i) ;
+
+        //Rôle : change la valeur de la case pour signaler qu'on l'a parcouru
+        void setVisited() ;
 
         //Rôle : Cette fonction retourne la liste des voisins du bloc
         vector<edge> getNeighboor()const ;
@@ -38,13 +52,6 @@ class block{
         */
         void setNeighboor(int n,int position) ;
 
-
-        //Rôle : retourne true si la case a été visitée
-        bool getVisited()const ;
-
-        //Rôle : change la valeur de la case pour signaler qu'on l'a parcouru
-        void setVisited() ;
-
         //Rôle : retourner sous forme de chaîne de caractères l'expression du block
         string toString() const ;
 
@@ -53,6 +60,6 @@ class block{
             return f << b.toString() ;
         }
 
-        
+
 
 } ;

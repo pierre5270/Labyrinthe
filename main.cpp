@@ -2,7 +2,7 @@
 
 int main (){
 
-    labyrinthe l (5) ;
+    labyrinthe l(5) ;
     l.init_labyrinthe() ;
     cout << l << endl ;
     /*

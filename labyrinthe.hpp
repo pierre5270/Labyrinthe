@@ -19,14 +19,9 @@ class labyrinthe: public block{
             h_wall = new bool[size+w] ;
             v_wall = new bool[size+w] ;
             
-            for(int i =0 ; i<size+w; i++){
-                this->h_wall[i] = false ;
-                this->v_wall[i] = false ;
-                if (i<size) this->grid[i].setValue(rand()%size) ;
-            }
         }
 
-    //Rôle : initialise la matrice constituant notre labyrinthe
+    //Rôle : initialise la matrice constituant notre labyrinthe en un état initial
     void init_labyrinthe() ;
 
     //Rôle : retourne la valeur de la grille à l'indice indiquée

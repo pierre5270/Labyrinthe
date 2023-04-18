@@ -1,7 +1,16 @@
 #include "labyrinthe.hpp"
 
-void labyrinthe::init_labyrinthe()
-{
+void labyrinthe::init_labyrinthe(){
+
+    for(int i =0 ; i<size+width; i++){
+        this->h_wall[i] = false ;
+        this->v_wall[i] = false ;
+        if (i<size){
+            this->grid[i].setValue(rand()%size) ;
+            this->grid[i].setID(i) ;
+        }
+    }
+
     cout << "Labyrinth initialized !!" << endl;
 }
 

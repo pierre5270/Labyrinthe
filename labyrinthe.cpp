@@ -29,6 +29,19 @@ bool labyrinthe::getV_wall(int i, int j) const
     return v_wall[j * width + i];
 }
 
+void labyrinthe::adjacent_list() {
+
+}
+void labyrinthe::fusion_labyrinth(){
+    //écriture de l'algorithme
+    //Initialisation des listes d'adjacences (adjacent_list)
+}
+
+void labyrinthe::aldous_broder_labyrinth(){
+    //écriture de l'algorithme
+    //Initialisation des listes d'adjacences   
+}
+
 
 string labyrinthe::toString() const{
 

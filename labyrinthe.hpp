@@ -1,4 +1,5 @@
 #include "block.hpp"
+#include "character.hpp"
 #include <map>
 #include <iomanip>
 
@@ -43,6 +44,15 @@ class labyrinthe: public block{
         ss << endl ;
         }
     }
+
+    //Rôle : intialise toutes les matrices d'adjacences de tous
+    //les points de la grille
+    void adjacent_list() ;
+    //Rôle : génère le labyrinthe à partir de l'algorithme de fusion
+    void fusion_labyrinth() ;
+
+    //Rôle : génère le labyrinthe à partir de l'algorithme d'Aldous-Broder
+    void aldous_broder_labyrinth() ;
 
     //Rôle : dessine le labyrinthe sur la sortie standard
     string toString()const ;

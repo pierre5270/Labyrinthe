@@ -8,13 +8,17 @@ using namespace std ;
 class edge{
     protected : 
 
-        int source ;
-        int destination ;
-        int weight ;
+        int source;
+        int destination;
+        int weight;
+        bool wall;
     
     public :
 
-        edge(int s , int dest , int w = 1) :source(s),destination(dest),weight(w){}
+        edge(int s ,int dest) :source(s),destination(dest){
+            weight = 1;
+            wall = true;
+        }
 
         int getSource()const ;
 
@@ -22,11 +26,15 @@ class edge{
 
         int getWeight()const ;
 
+        bool isopen()const ;
+
         void setSource(int s) ;
 
         void setDestination(int d) ;
 
         void setWeight(int w) ;
+
+        void open_wall() ;
 
         string toString() const ;
 
@@ -34,4 +42,4 @@ class edge{
             return f << e.toString() ;
         }
 
-} ;
+};

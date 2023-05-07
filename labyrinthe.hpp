@@ -1,32 +1,88 @@
-#include "block.hpp"
+#include "graph.hpp"
 #include "character.hpp"
-#include <map>
 #include <iomanip>
 
-class labyrinthe: public block{
+class labyrinthe: public graph{
 
     private :
-        int width ;
+
+        int length,width ; // M, N
         int size ;
-        block *grid ; // l'ensemble des cellules 
-        bool *h_wall ; // mur horizontal
-        bool *v_wall ; // mur vertical
 
 
     public :
-        labyrinthe (int w): width(w),size(w*w){
+        labyrinthe (int l,int w):length(l), width(w),size(w*l){
 
-            grid = new block[size] ;
-            h_wall = new bool[size+w] ;
-            v_wall = new bool[size+w] ;
-            
+            //Initialisation des blocs
+            for(int i =0 ; i< l ;i++){
+                for(int j = 0 ; j<w ;j++){
+                    all_block[cord(i,j)] = new block(rand()%size,cord(i,j)) ;
+
+                   if (i==0){
+                    if(j==0){
+                        road.emplace(pair(0,cord(i,j+1)),edge(0,cord(i,j+1))) ;
+                        road.emplace(pair(0, cord(i+1,j)),edge(0,cord(i+1,j))) ;
+                    } else if(j>0 && j<width-1){
+                        road.emplace(pair(cord(i,j),cord(i,j+1)),edge(cord(i,j),cord(i,j+1))) ;
+                        road.emplace(pair(cord(i,j), cord(i+1,j)),edge(cord(i,j),cord(i+1,j))); 
+                        road.emplace(pair(cord(i,j),cord(i,j-1)),edge(cord(i,j),cord(i,j-1))) ;
+                    }
+                    else{
+                        road.emplace(pair(width-1,cord(i+1,j)),edge(width-1,cord(i+1,j))) ;
+                        road.emplace(pair(width-1, cord(i,j-1)),edge(width-1,cord(i,j-1))) ;                        
+                    }
+                     
+                   }else if (i>0 && i<length -1){
+                    if(j==0){
+                        road.emplace(pair(cord(i,j),cord(i,j+1)),edge(cord(i,j),cord(i,j+1)));
+                        road.emplace(pair(cord(i,j), cord(i-1,j)),edge(cord(i,j),cord(i-1,j)));
+                        road.emplace(pair(cord(i,j), cord(i+1,j)),edge(cord(i,j),cord(i+1,j)));                        
+                    }else if(j>0 && j<width-1){
+                        road.emplace(pair(cord(i,j),cord(i,j+1)),edge(cord(i,j),cord(i,j+1))) ;
+                        road.emplace(pair(cord(i,j), cord(i+1,j)),edge(cord(i,j),cord(i+1,j))) ; 
+                        road.emplace(pair(cord(i,j),cord(i,j-1)),edge(cord(i,j),cord(i,j-1))) ;
+                        road.emplace(pair(cord(i,j),cord(i-1,j)),edge(cord(i,j),cord(i-1,j))) ;                        
+                    }
+                    else{
+                        road.emplace(pair(cord(i,j),cord(i-1,j)),edge(cord(i,j),cord(i-1,j))) ;
+                        road.emplace(pair(cord(i,j), cord(i,j-1)),edge(cord(i,j),cord(i,j-1))) ;
+                        road.emplace(pair(cord(i,j),cord(i+1,j)),edge(cord(i,j),cord(i+1,j))) ;                        
+                    }
+                   }
+                   else{
+                    if(j==0){
+                        road.emplace(pair(cord(i,j),cord(i,j+1)),edge(cord(i,j),cord(i,j+1))) ;
+                        road.emplace(pair(cord(i,j), cord(i-1,j)),edge(cord(i,j),cord(i-1,j))) ;                       
+                    } else if (j>0 && j<width-1){
+                        road.emplace(pair(cord(i,j), cord(i-1,j)),edge(cord(i,j),cord(i-1,j))) ;
+                        road.emplace(pair(cord(i,j), cord(i,j-1)),edge(cord(i,j),cord(i,j-1))) ;
+                        road.emplace(pair(cord(i,j),cord(i,j+1)),edge(cord(i,j),cord(i,j+1))) ;                    
+                    } else{
+                        road.emplace(pair(cord(i,j), cord(i-1,j)),edge(cord(i,j),cord(i-1,j))) ;
+                        road.emplace(pair(width-1, cord(i,j-1)),edge(width-1,cord(i,j-1))) ;                        
+                    }
+                   }
+
+                }
+            }
         }
+            
 
     //Rôle : initialise la matrice constituant notre labyrinthe en un état initial
     void init_labyrinthe() ;
 
+    //Rôle : retourne l'indice de la cellule
+    int cord (int i,int j) const ;
+
+
     //Rôle : retourne la valeur de la grille à l'indice indiquée
-    int getGrid(int i, int j)const ;
+    virtual int getGrid(int i, int j)const override ;
+
+    //Rôle : retourne un bloc présent dans notre labyrinthe
+    virtual block *getBlock() const override ;
+
+    //Rôle : retourne le chemin entre 2 cellules
+   virtual edge getEdge()const override ;
 
     //Rôle : retourne le résultat à l'indice indiquée
     bool getH_wall(int i, int j) const ;
@@ -61,4 +117,4 @@ class labyrinthe: public block{
     friend ostream &operator<<(ostream &f, labyrinthe l){
         return f<<l.toString() ;
     }
-} ;
+};

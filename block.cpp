@@ -28,10 +28,8 @@ vector<edge> block::getNeighboor()const {
     return neighboor ;
 }
 
-void block::setNeighboor(int n,int position=0){
-    assert(position>=0 && position<4) ;
-    //neighboor[position] = edge(this->getValue(),n) ;
-    neighboor.push_back(edge(this->getValue(),n)) ;
+void block::setNeighboor(edge e){
+    neighboor.push_back(e) ;
 }
 
 string block::toString()const {

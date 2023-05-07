@@ -50,7 +50,7 @@ class block{
          *2 : côté Ouest
          *3 : côté Nord
         */
-        void setNeighboor(int n,int position) ;
+        void setNeighboor(edge e) ;
 
         //Rôle : retourner sous forme de chaîne de caractères l'expression du block
         string toString() const ;

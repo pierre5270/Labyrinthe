@@ -12,6 +12,14 @@ int edge::getWeight()const{
     return weight ;
 }
 
+bool edge::isopen()const{
+    return wall ;
+}
+
+void edge::open_wall(){
+    wall = false ;
+}
+
 void edge::setSource(int s){
     source = s ;
 }
@@ -30,5 +38,6 @@ string edge:: toString() const{
     ss << " source_value :"<<to_string(getSource()) << endl ;
     ss << "destination value :"<<to_string(getDestination())<< endl ;
     ss << "weight :"<<to_string(getWeight())<< endl ;
+    ss << "wall :"<<to_string(isopen())<<endl ;
     return ss.str() ;
 }

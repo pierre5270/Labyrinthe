@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <map>
 #include "block.hpp"
@@ -10,15 +11,21 @@ class graph {
     public:
         graph(){}
 
-        //Rôle : retourne la valeur de la grille à l'indice indiquée
-        virtual int getGrid(int i, int j)const = 0;
-
         //Rôle : retourne un bloc présent dans notre labyrinthe
-        virtual block *getBlock() const = 0;
+        virtual block *getBlock(int ID)  = 0;
 
         //Rôle : retourne le chemin entre 2 cellules
-        virtual edge getEdge()const = 0  ;
+        virtual edge getEdge(int sID,int dID) = 0  ;
 
-        //Rôle : intialise toutes les matrices d'adjacences de tous les points de la grille
-        virtual void adjacent_list() = 0 ;
+        //Rôle : ajouter un chemin dans la liste des chemins
+        virtual void addEdge(edge e) = 0 ;
+
+        //Rôle : ajouter un chemin dans la liste d'adjacence du bloc
+        virtual void addAdjacentlist(edge e) = 0 ;
+
+        //Rôle : affiche l'ensemble des voisins d'un bloc de la grille
+        virtual void adjacent_list(int ID) = 0 ;
+
+        //Rôle : afficher le graph sur la sortie standard
+        virtual string toString () = 0 ;
 } ;

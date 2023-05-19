@@ -15,6 +15,8 @@ class edge{
     
     public :
 
+        edge() {}
+
         edge(int s ,int dest) :source(s),destination(dest){
             weight = 1;
             wall = true;

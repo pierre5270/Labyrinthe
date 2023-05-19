@@ -2,9 +2,14 @@
 
 int main (){
 
-    labyrinthe l(5) ;
-    l.init_labyrinthe() ;
-    cout << l << endl ;
+    labyrinthe l = labyrinthe(5,5);
+    l.fusion_labyrinth() ;
+    cout << l ;
+
+
+    //l.adjacent_list(2) ;
+    //l.init_labyrinthe() ;
+    //cout << l << endl ;
     /*
     block b = block(5) ;
     b.setNeighboor(2,1) ;

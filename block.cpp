@@ -21,7 +21,7 @@ void block::setID(int i){
 }
 
 void block::setVisited() {
-    visited = !visited ;
+    visited = true ;
 }
 
 vector<edge> block::getNeighboor()const {

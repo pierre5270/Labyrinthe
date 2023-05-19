@@ -3,6 +3,7 @@
 #include "character.hpp"
 #include <iomanip>
 #include <random>
+#include <numeric>
 
 class labyrinthe: public graph{
 
@@ -83,6 +84,7 @@ class labyrinthe: public graph{
                    
                 }
             }
+            
 
 
         }
@@ -97,8 +99,7 @@ class labyrinthe: public graph{
 
         //Rôle : retourne le chemin entre 2 cellules
         virtual edge getEdge(int sID,int dID) override{
-            return edge(1,2) ;
-            //return road[make_pair(sID,dID)] ; 
+            return road[pair(sID,dID)] ;
         }
 
         virtual void addEdge(edge e) override {
@@ -120,6 +121,24 @@ class labyrinthe: public graph{
         
         }
 
+        //Rôle : fusionner 2 cellules
+        void merge(int first_ID,int second_ID) ;
+
+        //Rôle : retourne si labyrinthe est achevé donc si les blocs ont tous la même valeur
+        bool is_ready() ;
+
+        //Rôle : nombre de cases visitées
+        int nb_opened() ;
+
+        //Rôle : retourne la liste des edges de la grille
+        vector<pair<int,int>> Edgelist() const ;
+
+        //Rôle : retourne la liste des blocs de la grille
+        vector<int> Blocklist() const ;
+
+        //Rôle : créer une liste de d'identifiants adjacent à un bloc
+        vector<int> adjacent_list_ID(int ID) ;
+
         //Rôle : génère le labyrinthe à partir de l'algorithme de fusion
         void fusion_labyrinth() ;
 
@@ -133,7 +152,7 @@ class labyrinthe: public graph{
 
             for (int i = 0; i < length; i++){
                 for (int j = 0; j < width; j++){ 
-                    ss << setw(2) << graph::all_block[cord(i,j)]->getValue()<< " ";
+                    ss << setw(2) << graph::all_block[cord(i,j)]->getValue()<< " " ;
                 }
                 ss << endl ;
             }

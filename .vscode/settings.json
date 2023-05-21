@@ -2,7 +2,10 @@
     "files.associations": {
         "ostream": "cpp",
         "iomanip": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "iostream": "cpp",
+        "*.tcc": "cpp",
+        "list": "cpp"
     },
     "makefile.launchConfigurations": [
         {

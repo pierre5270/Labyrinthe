@@ -24,11 +24,11 @@ void block::setVisited() {
     visited = true ;
 }
 
-vector<edge> block::getNeighboor()const {
+vector<edge*> block::getNeighboor() {
     return neighboor ;
 }
 
-void block::setNeighboor(edge e){
+void block::setNeighboor(edge *e){
     neighboor.push_back(e) ;
 }
 
@@ -36,7 +36,7 @@ string block::toString()const {
     ostringstream ss ;
     ss << "block value = "<< to_string(getValue())<< endl ;
     ss << "neighboors : " ;
-    for(edge x : neighboor) ss << to_string(x.getDestination())<<", " ;
+    for(edge *x : neighboor) ss << to_string(x->getDestination())<<", " ;
 
     return ss.str() ;
 }

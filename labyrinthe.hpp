@@ -35,23 +35,22 @@ class labyrinthe: public graph{
 
         virtual void addAdjacentlist(edge *e) override {
             block *b = getBlock(e->getSource()) ;
-            b ->setNeighboor(*e) ;
+            b ->setNeighboor(e) ;
         }    
 
         //Rôle : affiche l'ensemble des voisins d'un bloc de la grille
         virtual void adjacent_list(int ID) override {
             block* b = getBlock(ID) ;
             cout << "some ways :"<<endl ;
-            for ( edge e : b->getNeighboor())
-                if(e.isopen()) cout << e ;
+            for ( edge *e : b->getNeighboor())
+                if(e->isopen()) cout << e ;
         
         }
 
         //Rôle : dessine le labyrinthe sur la sortie standard
         virtual string toString() override {
             ostringstream ss;
-            ss << "Labyrinthe :" << endl;
-
+            
             for (int i = 0; i < length; i++){
                 for (int j = 0; j < width; j++){ 
                     ss << setw(2) << graph::all_block[cord(i,j)]->getValue()<< " " ;
@@ -66,7 +65,7 @@ class labyrinthe: public graph{
         int cord (int i,int j) const ;
 
         //Rôle : fusionner 2 cellules
-        void merge(int first_ID,int second_ID) ;
+        void fuse(int first_ID,int second_ID) ;
 
         //Rôle : retourne si labyrinthe est achevé donc si les blocs ont tous la même valeur
         bool is_ready() ;
@@ -81,10 +80,22 @@ class labyrinthe: public graph{
         vector<pair<int,int>> Edgelist() const;
 
         //Rôle : retourne la liste des blocs de la grille
-        vector<int> Blocklist() const ;
+        vector<block*> Blocklist() ;
 
         //Rôle : créer une liste de d'identifiants adjacent à un bloc
         vector<int> adjacent_list_ID(int ID) ;
+
+        //Rôle : Renvoie la liste des cases différentes de celle désignée
+        vector<block*> BlockDiff(int ID) ;
+
+        //Rôle : renvoie la matrice des murs verticaux du labyrinthe
+        void print_V_wall();
+
+        //Rôle : renvoie la matrice des murs horizontaux du labyrinthe
+        void print_H_wall();
+
+        //Rôle : renvoie le nombre de block visité
+        int nbVisited();
 
         //Rôle : génère le labyrinthe à partir de l'algorithme de fusion
         void fusion_labyrinth() ;

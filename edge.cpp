@@ -13,11 +13,11 @@ int edge::getWeight()const{
 }
 
 bool edge::isopen()const{
-    return wall ;
+    return free_road ;
 }
 
 void edge::open_wall(){
-    wall = false ;
+   free_road = true;
 }
 
 void edge::setSource(int s){

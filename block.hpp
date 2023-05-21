@@ -9,7 +9,7 @@ class block{
         int ID ;
         int value ;
         bool visited ;
-        vector<edge> neighboor ;
+        vector<edge*> neighboor ;
 
     public :
 
@@ -41,7 +41,7 @@ class block{
         void setVisited() ;
 
         //Rôle : Cette fonction retourne la liste des voisins du bloc
-        vector<edge> getNeighboor()const ;
+        vector<edge*> getNeighboor() ;
 
         //Rôle : Cette fonction ajoute un élément à la liste des voisins d'un bloc
         // à noter que :
@@ -50,7 +50,7 @@ class block{
          *2 : côté Ouest
          *3 : côté Nord
         */
-        void setNeighboor(edge e) ;
+        void setNeighboor(edge *e) ;
 
         //Rôle : retourner sous forme de chaîne de caractères l'expression du block
         string toString() const ;

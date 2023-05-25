@@ -224,9 +224,11 @@ void labyrinthe::aldous_broder_labyrinth(){
     block *b_current = blocks[rand()%blocks.size()];
 
     while((nbVisited()<taille)){
-        
+
+        // sélectionne un voisin aléatoirement
         neighboor = b_current->getNeighboor();
         ind_n = rand()%neighboor.size();
+
         if(!b_current->getVisited()){
             b_current->setVisited();
             
@@ -234,9 +236,12 @@ void labyrinthe::aldous_broder_labyrinth(){
             //cout << "test1" << endl ;
             if(!neighboor[ind_n]->isopen()){
                 
-                getEdge(neighboor[ind_n]->getSource(),neighboor[ind_n]->getDestination())->open_wall();
+                if(!getBlock(neighboor[ind_n]->getDestination())->getVisited()){
+                    getEdge(neighboor[ind_n]->getSource(),neighboor[ind_n]->getDestination())->open_wall();
+                    getEdge(neighboor[ind_n]->getDestination(),neighboor[ind_n]->getSource())->open_wall();
+                }
                 //cout << "open_source" << endl ;
-                //getEdge(neighboor[ind_n]->getDestination(),neighboor[ind_n]->getSource())->open_wall();
+                //
                 //cout << "open_destination" << endl ;
 
             }

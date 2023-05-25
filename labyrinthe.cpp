@@ -233,25 +233,15 @@ void labyrinthe::aldous_broder_labyrinth(){
             b_current->setVisited();
             
         }
-            //cout << "test1" << endl ;
+            //Si le chemin avec le voisin n'est pas ouvert
             if(!neighboor[ind_n]->isopen()){
-                
+                // si la case n'a pas encore été visitée
                 if(!getBlock(neighboor[ind_n]->getDestination())->getVisited()){
                     getEdge(neighboor[ind_n]->getSource(),neighboor[ind_n]->getDestination())->open_wall();
                     getEdge(neighboor[ind_n]->getDestination(),neighboor[ind_n]->getSource())->open_wall();
                 }
-                //cout << "open_source" << endl ;
-                //
-                //cout << "open_destination" << endl ;
-
             }
             b_current = getBlock(neighboor[ind_n]->getDestination());
-           
-            cout << nbVisited() << endl ;
-            //cout << blocks.size() << endl ;
-        
-        
-
     }   
 }
 

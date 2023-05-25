@@ -180,6 +180,7 @@ void labyrinthe::fusion_labyrinth(){
     // Initialise un objet de générateur de nombres aléatoires et une distribution uniforme pour sélectionner une case au hasard
 
     srand(time(NULL)) ;
+    
     // déclaration des identifiants des cellules fusionnées
     pair<int,int> wall ;
     
@@ -218,34 +219,33 @@ void labyrinthe::aldous_broder_labyrinth(){
 
     vector<block*> blocks = Blocklist(); //déclaration des cellules du labyrinthe
     vector<edge*> neighboor ; //L'ensemble des voisins de la cellules sélectionnées
-    int ind = rand()%blocks.size(); //Indice de la celulle
     int ind_n ; // Indice de la cellule adjacente dans la liste des blocks adjacents
     int taille = length*width;
-    block *b_current = blocks[ind];
+    block *b_current = blocks[rand()%blocks.size()];
 
-    while(nbVisited()<taille){
+    while((nbVisited()<taille)){
         
         neighboor = b_current->getNeighboor();
         ind_n = rand()%neighboor.size();
         if(!b_current->getVisited()){
             b_current->setVisited();
+            
+        }
             //cout << "test1" << endl ;
             if(!neighboor[ind_n]->isopen()){
                 
                 getEdge(neighboor[ind_n]->getSource(),neighboor[ind_n]->getDestination())->open_wall();
-                getEdge(neighboor[ind_n]->getDestination(),neighboor[ind_n]->getSource())->open_wall();
+                //cout << "open_source" << endl ;
+                //getEdge(neighboor[ind_n]->getDestination(),neighboor[ind_n]->getSource())->open_wall();
+                //cout << "open_destination" << endl ;
 
-                //auto it = find(blocks.begin(),blocks.end(),b_current);
-                b_current = getBlock(neighboor[ind_n]->getDestination());
-                //blocks.erase(it);
-                
-                //cout << "test2" << endl ;
-            } else continue ;
+            }
+            b_current = getBlock(neighboor[ind_n]->getDestination());
            
             cout << nbVisited() << endl ;
             //cout << blocks.size() << endl ;
-        }
-        ind = rand()%blocks.size();
+        
+        
 
     }   
 }

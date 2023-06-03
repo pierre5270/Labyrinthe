@@ -4,12 +4,15 @@
 #include <utility>
 #include "block.hpp"
 #include <cassert>
+#include <deque>
+#include <set>
 
 class graph {
     protected :
         map<int,block*> all_block ; // l'ensemble des cellules ID --> bloc
         map <pair<int,int>, edge*> road ; // Ensemble des chemins ou murs possibles
-        map <int,int> Chemins ;
+        map <int,vector<int>> Chemins ;
+        
     public:
         graph(){}
 
@@ -20,10 +23,10 @@ class graph {
         virtual edge *getEdge(int sID,int dID) = 0  ;
 
         //Rôle : retourne le trajet  d'un identifiant
-        virtual vector<int> getTrajet() = 0 ;
+        virtual vector<int> getTrajet(int x) = 0 ;
 
         //Rôle: ajoute un point dans la map de chemin
-        virtual void SetTrajet(int x_p,int x_c)= 0;
+        virtual void SetTrajet(int x_p,vector<int> tp)= 0;
 
         //Rôle : ajouter un chemin dans la liste des chemins
         virtual void addEdge(edge *e) = 0 ;
@@ -36,4 +39,15 @@ class graph {
 
         //Rôle : afficher le graph sur la sortie standard
         virtual string toString () = 0 ;
+
+        //Rôle : met toute les tailles des edges à une certaine valeur
+        virtual void set_all_vertex_to_max_value(double value) = 0;
+
+        //Rôle : calcule la distance Euclidienne entre 2 points
+        virtual double heuristic_distance_estimator(int id1_x,int id1_y, int id2_x,int id2_y) = 0;
+
+        //Rôle : Détermine le chemin le plus court vers le résultat
+        virtual void astar (int vstart, int vend) = 0 ;
+
+
 } ;

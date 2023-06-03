@@ -10,7 +10,7 @@ class edge{
 
         int source;
         int destination;
-        int weight;
+        int length;
         bool free_road;
     
     public :
@@ -18,7 +18,7 @@ class edge{
         edge() {}
 
         edge(int s ,int dest) :source(s),destination(dest){
-            weight = 1;
+            length = 1;
             free_road = false;
         }
 
@@ -26,7 +26,7 @@ class edge{
 
         int getDestination()const ;
 
-        int getWeight()const ;
+        int getLength()const ;
 
         bool isopen()const ;
 
@@ -34,7 +34,7 @@ class edge{
 
         void setDestination(int d) ;
 
-        void setWeight(int w) ;
+        void setLength(int w) ;
 
         void open_wall() ;
 

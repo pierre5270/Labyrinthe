@@ -5,13 +5,14 @@ labyrinthe::labyrinthe (int l,int w):length(l), width(w),size(w*l){
     //Initialisation des blocs
     for(int i =0 ; i< l ;i++){
         for(int j = 0 ; j<w ;j++){
-            all_block[cord(i,j)] = new block(cord(i,j),cord(i,j)) ;
+            all_block[cord(i,j)] = new block(i,j,cord(i,j)) ;
+            all_block[cord(i,j)]->Setchemin(cord(i,j)) ;
 
             if (i==0){
                 if(j==0){
 
                     addEdge(new edge(0,cord(i,j+1))) ;
-                     addEdge(new edge(0,cord(i+1,j))) ;
+                    addEdge(new edge(0,cord(i+1,j))) ;
 
                 } else if(j>0 && j<width-1){    
 
@@ -68,8 +69,21 @@ labyrinthe::labyrinthe (int l,int w):length(l), width(w),size(w*l){
         }
     }
             
+}
 
+//Rôle : retourne la longueur du labyrinthe
+int labyrinthe::getLength() const {
+    return this->length;
+}
 
+//Rôle : retourne la largeur du labyrinthe
+int labyrinthe::getWidth() const {
+    return this->width;
+}
+
+//Rôle : retourne la size du tableau
+int labyrinthe::getSize()const {
+    return this->size;
 }
 
 
@@ -80,6 +94,7 @@ int labyrinthe::cord(int i,int j) const {
     return width*i+j ;
 }
 
+
 void labyrinthe::fusion(int first_ID,int second_ID){
 
     getEdge(first_ID,second_ID)->open_wall();
@@ -87,26 +102,48 @@ void labyrinthe::fusion(int first_ID,int second_ID){
     block *b1 = getBlock(first_ID);
     block *b2 = getBlock(second_ID);
 
-    //valeur minimale entre les 2  blocs
-    int x = min(b1->getID(),b2->getID()) ;
-    cout << x << endl ;
 
+
+    //valeur minimale entre les 2  blocs
+    //int x = min(b1->getID(),b2->getID()) ;
+    //cout << x << endl ;
+
+    // si les chemins sont différents, on les fusionne
+    
+    if(b1->getChemin()[0] != b2->getChemin()[0]) {
+        // on fusionne les deux chemins
+        for (auto x : b2->getChemin()){
+            b1->Setchemin(x) ;
+            //getBlock(x)->setValue(min(b1->getID(),b2->getID()));
+            
+        }
+    }
+
+    for (auto x : b2->getChemin()){
+        Chemins[x] = b1->getChemin() ;
+        getBlock(x)->setValue(min(b1->getID(),b2->getID()));
+        
+    }
+    /*
     if(b1->getValue() != b2->getValue()){
-        b2->setID(x);
-        b1->setID(x);
+        b2->setValue(x);
+        b1->setValue(x);
         b2->Setchemin(b1->getID());
         b1->Setchemin(b2->getID());
-        cout << "done" << endl ;
+    
     }
     for(int i :b2->getChemin()){
         b1->Setchemin(i);
     }
     for(int i :b1->getChemin()){
-        getBlock(i)->setID(x);
-    }
+        getBlock(i)->setValue(x);
+    }*/
+    
 }
 
+
 bool labyrinthe::is_ready() {
+    
     for(int i=0 ; i<size-1 ; i++){
         if(getBlock(i)->getValue()!=0) return false ;
     }
@@ -191,20 +228,17 @@ void labyrinthe::fusion_labyrinth(){
     vector<pair<int,int>> walls = Edgelist() ;
     
     // Continue la fusion tant que le labyrinthe n'est pas complètement connecté
-    //while(!is_ready()) {
-        while(nbwall_opened()!=length){
+    int taille = length*width ;
+    while(nbwall_opened()<taille) {
         //cout << nbwall_opened()<< endl ;
         // sélectionne un mur aléatoirement
         wall_id = rand() % walls.size() ;
         wall = walls[wall_id] ;
-        
-        //if(!getEdge(wall.first,wall.second)->isopen()){
-            //fuse is the problem
+        //fuse is the problem
+        //cout << "walls :"<<walls.size()<< endl;
         fusion(wall.first,wall.second);
         auto it = find(walls.begin(),walls.end(),pair(wall.first,wall.second));
         walls.erase(it);
-        //} else continue;
-        //cout << nbwall_opened() << endl ;
 
     }
 

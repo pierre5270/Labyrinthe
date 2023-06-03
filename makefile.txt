@@ -8,18 +8,19 @@ CFLAGS = $(GTKMM_CF) -Wall -fconcepts # les options du compilateur
 LDFLAGS = $(GTKMM_LD)      # les options pour l’éditeur de liens
 
 # Répertoires des fichiers sources
-SRC_DIR_M := Modele/ # Répertoires des fichiers de type modèle
-SRC_DIR_V := /home/pierre/Bureau/ELEC4/C++/Projet_COO/Labyrinthe/Vue # Répertoires des fichiers de type Vue
-SRC_DIR_C := Controleur/ # Répertoires des fichiers de type controleur
+SRC_DIR_M := Modele # Répertoires des fichiers de type modèle
+SRC_DIR_V := Vue # Répertoires des fichiers de type Vue
+SRC_DIR_C := Controleur # Répertoires des fichiers de type controleur
 
 # Répertoire des fichiers objets
-OBJ_DIR := build/ # Répertoires des fichiers objets 
+OBJ_DIR := build # Répertoires des fichiers objets 
 
 # Répertoire de sortie de l'exécutable
-BIN_DIR := bin/
+BIN_DIR := bin
 
 # les fichiers sources
-SRC = main.cpp labyrinthe.cpp character.cpp block.cpp edge.cpp GameState.cpp GridGame.cpp Vue_E.cpp Vue_G.cpp Vue_R.cpp Controleur.cpp
+SRC = main.cpp Modele/labyrinthe.cpp Modele/character.cpp Modele/block.cpp Modele/edge.cpp Modele/GameState.cpp Modele/GridGame.cpp Vue/Vue_E.cpp Vue/Vue_G.cpp Vue/Vue_R.cpp
+#SRC = $(wildcard $(SRC_DIR_M)/*.cpp) $(wildcard $(SRC_DIR_V)/*.cpp) $(wildcard $(SRC_DIR_C)/*.cpp)
 
 PROG = laby_Gtk   # nom de l'exécutable
 OBJS = $(SRC:.cpp=.o) # les .o qui en découlent
@@ -28,6 +29,7 @@ all: $(PROG)
 
 # étapes de compilation et d'édition de liens
 # $@ la cible $^ toutes les dépendances
+
 $(PROG): $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
@@ -38,10 +40,7 @@ edge.cpp : edge.hpp
 character.cpp : character.hpp
 GridGame.cpp : GridGame.hpp labyrinthe.hpp
 GameState.cpp : GameState.hpp
-Vue_E.cpp : Vue_E.hpp Vue.hpp
-Vue_G.cpp : Vue_G.hpp Vue.hpp
-Vue_R.cpp : Vue_R.hpp Vue.hpp
-Controleur.cpp : Controleur.hpp
+#Controleur/Controleur.cpp : Controleur/Controleur.hpp
 
 # le lien entre .o et -c
 # $< dernière dépendance

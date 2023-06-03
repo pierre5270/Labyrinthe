@@ -1,0 +1,4 @@
+//Fonction fusion hs 
+//Fonction Astar pareil
+
+//Penser à faire une classe d'exception

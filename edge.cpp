@@ -8,8 +8,8 @@ int edge::getDestination()const{
     return destination ;
 }
 
-int edge::getWeight()const{
-    return weight ;
+int edge::getLength()const{
+    return length ;
 }
 
 bool edge::isopen()const{
@@ -28,8 +28,8 @@ void edge ::setDestination(int d) {
     destination = d ;
 }
 
-void edge::setWeight(int w){
-    weight = w ;
+void edge::setLength(int w){
+    length = w ;
 }
 
 string edge:: toString() const{
@@ -37,7 +37,7 @@ string edge:: toString() const{
 
     ss << " source_value :"<<to_string(getSource()) << endl ;
     ss << "destination value :"<<to_string(getDestination())<< endl ;
-    ss << "weight :"<<to_string(getWeight())<< endl ;
+    ss << "weight :"<<to_string(getLength())<< endl ;
     ss << "wall :"<<to_string(isopen())<<endl ;
     return ss.str() ;
 }

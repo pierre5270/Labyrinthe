@@ -1,4 +1,5 @@
 #include "labyrinthe.hpp"
+#include <random>
 
 labyrinthe::labyrinthe (int l,int w):length(l), width(w),size(w*l){
 
@@ -97,63 +98,78 @@ int labyrinthe::cord(int i,int j) const {
 
 void labyrinthe::fusion(int first_ID,int second_ID){
 
+    //On ouvre le mur séparant les 2 blocs
     getEdge(first_ID,second_ID)->open_wall();
-
-    block *b1 = getBlock(first_ID);
-    block *b2 = getBlock(second_ID);
-
-
-
-    //valeur minimale entre les 2  blocs
-    //int x = min(b1->getID(),b2->getID()) ;
-    //cout << x << endl ;
-
-    // si les chemins sont différents, on les fusionne
+    getEdge(second_ID,first_ID)->open_wall();
     
-    if(b1->getChemin()[0] != b2->getChemin()[0]) {
-        // on fusionne les deux chemins
-        for (auto x : b2->getChemin()){
-            b1->Setchemin(x) ;
-            //getBlock(x)->setValue(min(b1->getID(),b2->getID()));
+
+    //Chemin de tous les blocs relés
+    deque<int> active_queue ;
+    set<int> closed_set;
+    //map<int,int> path;
+    set<int> real_path ;
+    
+    //ID du bloc de départ
+    active_queue.push_back(first_ID) ;
+    real_path.insert(first_ID);
+    
+    do{
+
+        auto b_current = active_queue.front() ;
+
+        //On retire le bloc courant de la file d'attente
+        active_queue.pop_front() ;
+
+        //On ajoute le bloc courant à la liste de chemin
+        closed_set.insert(b_current) ;
+
+        for(edge *e : getBlock(b_current)->getNeighboor()){
+
             
-        }
-    }
+            int b_next = e->getDestination();
+            if(getEdge(b_current,b_next)->isopen()){
 
-    for (auto x : b2->getChemin()){
-        Chemins[x] = b1->getChemin() ;
-        getBlock(x)->setValue(min(b1->getID(),b2->getID()));
-        
+                if(closed_set.find(b_next) != closed_set.end()) continue;
+
+                if (find(active_queue.begin(), active_queue.end(), b_next) == active_queue.end()) {
+                    active_queue.push_back(b_next);
+                    real_path.insert(b_next);        
+                }
+            }      
+        }
+
+    }while(!active_queue.empty()) ;
+
+    //cout <<"real_path :"<<real_path.size()<<endl;
+
+    //La valeur minimale du chemin généré
+    auto minValue = std::min_element(real_path.begin(), real_path.end());
+    for (auto it = real_path.begin();it!=real_path.end();it++){
+        this->getBlock(*it)->setValue(*minValue);
     }
-    /*
-    if(b1->getValue() != b2->getValue()){
-        b2->setValue(x);
-        b1->setValue(x);
-        b2->Setchemin(b1->getID());
-        b1->Setchemin(b2->getID());
-    
-    }
-    for(int i :b2->getChemin()){
-        b1->Setchemin(i);
-    }
-    for(int i :b1->getChemin()){
-        getBlock(i)->setValue(x);
-    }*/
-    
+ 
 }
 
 
 bool labyrinthe::is_ready() {
     
-    for(int i=0 ; i<size-1 ; i++){
-        if(getBlock(i)->getValue()!=0) return false ;
+    bool result = true;
+
+    for (auto it = all_block.begin();it!=all_block.end();it++){
+        if(it->second->getValue()!=0){
+            result = !result ;
+            break;
+        }
     }
-    return true ;
+    return result ;
 }
 
 vector <pair<int,int>> labyrinthe:: Edgelist() const {
     vector <pair<int,int>> edges ;
-    for(auto it = road.begin() ; it!=road.end() ; it++)
+    for(auto it = road.begin() ; it!=road.end() ; it++){
+        if(find(edges.begin(),edges.end(),pair(it->first.second,it->first.first)) != edges.end()) continue ;
         edges.push_back(it->first) ;
+    }
     return edges ;
 }
 
@@ -184,12 +200,11 @@ int labyrinthe::nbwall() const {
 
 int labyrinthe::nbwall_opened(){
     int n = 0 ;
-    for(map<pair<int,int>,edge*>::iterator it = road.begin() ; it!=road.end() ;it++){
-        if(it->second->isopen()) n++ ;
-    
+    vector<pair<int,int>> edges = this->Edgelist() ;
+    for(auto it = edges.begin();it!=edges.end();it++){
+        if(getEdge(it->first,it->second)->isopen()) n++ ;
     }
-    
-    return n ;
+    return n;
     
 }
 vector<block*> labyrinthe::BlockDiff(int ID) {
@@ -219,30 +234,39 @@ void labyrinthe::fusion_labyrinth(){
     // Initialise un objet de générateur de nombres aléatoires et une distribution uniforme pour sélectionner une case au hasard
 
     srand(time(NULL)) ;
-    
+    //cout << "taille des chemins :"<< road.size()<< endl;
     // déclaration des identifiants des cellules fusionnées
     pair<int,int> wall ;
     int wall_id ;
     
     //liste des identifiants de tous les murs du labyrinthe
     vector<pair<int,int>> walls = Edgelist() ;
+    cout << "nombre de chemin" << walls.size()<< endl;
+    //int i = 0;
     
     // Continue la fusion tant que le labyrinthe n'est pas complètement connecté
-    int taille = length*width ;
-    while(nbwall_opened()<taille) {
-        //cout << nbwall_opened()<< endl ;
+    //while(this->nbwall_opened()<this->getSize()){
+    while(!this->is_ready()){
+
         // sélectionne un mur aléatoirement
         wall_id = rand() % walls.size() ;
         wall = walls[wall_id] ;
-        //fuse is the problem
-        //cout << "walls :"<<walls.size()<< endl;
-        fusion(wall.first,wall.second);
-        auto it = find(walls.begin(),walls.end(),pair(wall.first,wall.second));
-        walls.erase(it);
 
+        //fusion des cellules
+        fusion(wall.first,wall.second);
+
+        // Supprime le mur de la liste
+        walls.erase(walls.begin() + wall_id);
+
+        //cout << "j'ai  :"<<nbwall_opened() << endl;
     }
 
+    cout << "j'ai ouvert :"<<nbwall_opened() << endl;
+
 }
+
+
+
 
 void labyrinthe::aldous_broder_labyrinth(){
 
@@ -278,6 +302,7 @@ void labyrinthe::aldous_broder_labyrinth(){
             b_current = getBlock(neighboor[ind_n]->getDestination());
     }   
     cout <<"Done"<<endl;
+    cout << "j'ai ouvert :"<<nbwall_opened() << endl;
 }
 
 void labyrinthe::print_V_wall(){
@@ -287,7 +312,7 @@ void labyrinthe::print_V_wall(){
     for (int i = 0; i < length; i++){
         for (int j = 0; j < width; j++){
              if(cord(i,j)>=length){
-                string s = (getEdge(cord(i-1,j),cord(i,j))->isopen())?"1":"0" ;
+                string s = (getEdge(cord(i-1,j),cord(i,j))->isopen()&&getEdge(cord(i,j),cord(i-1,j))->isopen())?"1":"0" ;
                 ss << setw(2) << s << " " ;
             }
             
@@ -304,7 +329,7 @@ void labyrinthe::print_H_wall(){
     for (int i = 0; i < length; i++){
         for (int j = 0; j < width-1; j++){
              if(1){
-                string s = (getEdge(cord(i,j),cord(i,j+1))->isopen())?"1":"0" ;
+                string s = (getEdge(cord(i,j),cord(i,j+1))->isopen()&&getEdge(cord(i,j+1),cord(i,j))->isopen())?"1":"0" ;
                 ss << setw(2) << s << " " ;
             }
             

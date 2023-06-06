@@ -12,6 +12,7 @@ class edge{
         int destination;
         int length;
         bool free_road;
+        
     
     public :
 
@@ -20,6 +21,7 @@ class edge{
         edge(int s ,int dest) :source(s),destination(dest){
             length = 1;
             free_road = false;
+            
         }
 
         int getSource()const ;

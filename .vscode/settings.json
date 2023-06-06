@@ -1,0 +1,29 @@
+{
+    "files.associations": {
+        "ostream": "cpp",
+        "iomanip": "cpp",
+        "map": "cpp",
+        "iostream": "cpp",
+        "*.tcc": "cpp",
+        "list": "cpp",
+        "deque": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "ranges": "cpp",
+        "utility": "cpp",
+        "valarray": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "cmath": "cpp"
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/pierre/Bureau/ELEC4/C++/Projet_COO/Labyrinthe",
+            "binaryPath": "/home/pierre/Bureau/ELEC4/C++/Projet_COO/Labyrinthe/main",
+            "binaryArgs": []
+        }
+    ]
+}

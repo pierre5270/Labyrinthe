@@ -95,11 +95,10 @@ class labyrinthe: public graph{
 
 
         // astar algorithm 
-        virtual void astar (int vstart, int vend) override {
-
-            
+        virtual void astar (int bstart, int bend) override {
+ 
             deque <int> active_queue ;
-            set<uint> closed_set ;
+            set<int> closed_set ;
             map<int,int> parent ;
             deque <int> path ;
             ostringstream end_result;
@@ -107,66 +106,65 @@ class labyrinthe: public graph{
             set_all_vertex_to_max_value(numeric_limits<double>::max()) ;
             
             //ID of the start vertex
-            active_queue.push_back(vstart) ;
+            active_queue.push_back(bstart) ;
 
             // Set start vertex weight to 0
-            getBlock(vstart)->SetWeight(0.00);
+            getBlock(bstart)->SetWeight(0.00);
             
             do{
 
                 // from the current vertex in the front of the queue
                 // compute all vertices reachable in 1 step
-                auto vcurrent = active_queue.front();
+                auto bcurrent = active_queue.front();
                 active_queue.pop_front() ;
 
-                if(vcurrent==vend) break ;
+                if(bcurrent==bend) break ;
 
-                closed_set.insert(vcurrent) ;
-
-                for(edge *e : getBlock(vcurrent)->getNeighboor()){
+                closed_set.insert(bcurrent) ;
+                //cout << "ok"<<endl;
+                for(edge *e : getBlock(bcurrent)->getNeighboor()){
                 
-                int vnext = e->getDestination() ;
-                if (getEdge(vcurrent,vnext)->isopen()){
-                if(closed_set.find(vnext) != closed_set.end()) continue ; 
+                    int bnext = e->getDestination() ;
+                    if (getEdge(bcurrent,bnext)->isopen()){
+                        if(closed_set.find(bnext) != closed_set.end()) continue ; 
 
-                auto w = getBlock(vcurrent)->getWeight() + getEdge(vcurrent,vnext)->getLength() ;
-                auto f = w + heuristic_distance_estimator(getBlock(vcurrent)->getX(),getBlock(vcurrent)->getY(),getBlock(vnext)->getX(),getBlock(vnext)->getY());
+                        auto w = getBlock(bcurrent)->getWeight() + getEdge(bcurrent,bnext)->getLength() ;
+                        auto f = w + heuristic_distance_estimator(getBlock(bcurrent)->getX(),getBlock(bcurrent)->getY(),getBlock(bnext)->getX(),getBlock(bnext)->getY());
                 
-                if(find(active_queue.begin(), active_queue.end(), vnext) == active_queue.end()){
-                    getBlock(vnext)->SetWeight(w) ;
-                    getBlock(vnext)->SetEstimate(f) ;
-                    active_queue.push_back(vnext) ;
-                    parent[vnext] = vcurrent;
-                    //cout << parent.size() << endl;
-                    
-                } 
-                else if (f < getBlock(vnext)->getEstimate()){
-                    getBlock(vnext)->SetWeight(w) ;
-                    getBlock(vnext)->SetEstimate(f) ;
-                    parent[vnext] = vcurrent;
-                    //cout << parent.size() << endl;
-                    
+                        if(find(active_queue.begin(), active_queue.end(), bnext) == active_queue.end()){
+                            getBlock(bnext)->SetWeight(w) ;
+                            getBlock(bnext)->SetEstimate(f) ;
+                            active_queue.push_back(bnext) ;
+                            parent[bnext] = bcurrent;
+                            cout <<"taille de l'arbre :"<< parent.size() << endl;
+                        } 
+                        else if (f < getBlock(bnext)->getEstimate()){
+                            getBlock(bnext)->SetWeight(w) ;
+                            getBlock(bnext)->SetEstimate(f) ;
+                            parent[bnext] = bcurrent;
+                            cout <<"taille de l'arbre :"<< parent.size() << endl;
+                        }
+                    }
                 }
-                }
-                }
-
-                auto sort_function_on_estimate = [&](int a, int b) { 
-                return getBlock(a)->getEstimate() < getBlock(b)->getEstimate() ; 
+                
+                auto sort_function_on_estimate = [this](int a, int b) { 
+                return this->getBlock(a)->getEstimate() < this->getBlock(b)->getEstimate() ; 
                 } ;
                 
                 sort(active_queue.begin(), active_queue.end(), sort_function_on_estimate);
+                cout << "queue :"<<active_queue.size()<< endl;
 
             } while(!active_queue.empty()) ;
 
             
-            int current = vend ;
+            int current = bend ;
             
-            while(current != vstart) {
+            while(current != bstart) {
                 path.push_front(current) ;
                 current = parent[current];
                 //cout << "hello"<<endl;
             }
-            path.push_front(vstart) ;
+            path.push_front(bstart) ;
             path_counter = path.size() ;
 
             int compt = 1 ;

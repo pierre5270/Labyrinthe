@@ -8,33 +8,30 @@ using namespace std ;
 class Gamestate {
     private :
         string nom;
-        int Lab_length,Lab_width;
+
         bool algo ;// 0 pour fusion et 1 pour aldous Brôder
+        bool begin_ , end_ ; // Déterminent si joueur à fini la partie ou non
 
     public :
-        Gamestate(){}
-        Gamestate(string n,int l,int w) : nom(n),Lab_length(l),Lab_width(w){}
+        
+        Gamestate(string n="Joueur") : nom(n),begin_(false),end_(false){}
 
         // Renvoie le nom de l'utilisateur
         string getNom()const ;
 
-        //Renvoie la longueur de la grille constituant le labyrinthe
-        int getLength()const ;
-
-        //Renvoie la largeur de la grille constituant le labyrinthe
-        int getWidth()const ;
-
         //Renvoie le booléen désignant l'algo choisi
         bool isAlgo()const ;
 
+        bool can_move()const ;
+
+        void begin() ;
+
+        bool is_end() const ;
+
+        void end() ;
+
         //Remplie le nom de l'utilisateur
         void SetNom(string n) ;
-
-        // Remplie la longueur de la grille de jeu
-        void SetLength(int l) ;
-
-        // Remplie la largeur de la grille de jeu
-        void SetWidth(int w) ;
 
         //modifie l'algorithme choisi
         void SetAlgo(bool a) ;

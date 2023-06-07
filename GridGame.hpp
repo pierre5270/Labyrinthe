@@ -1,5 +1,6 @@
 #pragma once
 #include "labyrinthe.hpp"
+#include "character.hpp"
 #include <cmath>
 #include <gtkmm-3.0/gtkmm.h>
 
@@ -11,28 +12,31 @@ class GridGame : public Gtk::DrawingArea{
 
     private:
 
-        labyrinthe *l ; // Le labirynthe généré
-        bool mode ; // 0 pour fusion et 1 pour l'Aldous Bröder
-        bool begin , end; //Servent à déterminer si le jeu est terminé ou pas
-
-        //Les coordonnées du personnage
-        int X_C=0;
-        int Y_C=0;
 
         //Les  coordonnées des cellules du quadrillage
-        vector<pair<int,int>> Coords;
+        //vector<pair<int,int>> Coords;
 
         // Touche directionnelles du clavier
-        GdkEventKey *Key;
+        GdkEventKey *Key_;
 
 
     public :
 
-        GridGame(int length,int width,bool m=true);
+        //Constructeur
+        GridGame(){
+            this->set_size_request(X_GRID, Y_GRID);
+        }
 
-        bool getWin();
+        GdkEventKey *get_key(){
+            return Key_ ;
+        }
+
+        void set_key(GdkEventKey *Key){
+            this->Key_ = Key ;
+        }
 
 
+/*
         bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override{
 
             
@@ -43,23 +47,10 @@ class GridGame : public Gtk::DrawingArea{
             this->set_focus_on_click(true);
 
             //Dimmensions des cellules
-            int cell_x = X_GRID/l->getLength();
-            int cell_y = Y_GRID/l->getWidth();
+            int cell_x = X_GRID/l.getLength();
+            int cell_y = Y_GRID/l.getWidth();
 
 
-            //Appliquer un type d'algorithme
-            /*
-            if(mode){
-                l->aldous_broder_labyrinth() ;
-                cout << "diag_one" <<endl;
-            } else 
-            {
-                l->fusion_labyrinth();
-                cout << "diag_two" <<endl;
-            }
-            
-            cout << *l << endl;
-            */
             
             // Dessin du rectangle de la grille de jeu
             cr->set_source_rgb(0.0, 0.0, 0.0); // Couleur noire
@@ -97,51 +88,53 @@ class GridGame : public Gtk::DrawingArea{
             //Création du personnage
             image = Gdk::Pixbuf::create_from_file("link.png");
             scaledImage = image->scale_simple(cell_x, cell_y, Gdk::INTERP_BILINEAR);
-            Gdk::Cairo::set_source_pixbuf(cr,scaledImage, X_C*cell_x, Y_C*cell_y);
+            Gdk::Cairo::set_source_pixbuf(cr,scaledImage, cell_x*this->player.getPosition_X(), cell_y*this->player.getPosition_Y());
             cr->paint();
 
 
             //Actualise les coordonnées du personnage
             if(this->begin){
-                if (Key->keyval == GDK_KEY_Up && Y_C != 0) {
-                    X_C = X_C;
-                    Y_C = Y_C - 1;
-                    cout << "ça marche"<< endl;
+                if (Key->keyval == GDK_KEY_Up && this->player.getPosition_Y() != 0) {
+                    
+                    this->player.setPosition_Y(this->player.getPosition_Y()-1);
+                    //cout << "ça marche"<< endl;
                 }
-                else if (Key->keyval == GDK_KEY_Down && Y_C != (l->getWidth()-1)) {
-                    X_C = X_C;
-                    Y_C = Y_C + 1; 
-                    cout << "ça marche"<< endl;
+                else if (Key->keyval == GDK_KEY_Down && this->player.getPosition_Y() != (l.getWidth()-1)) {
+
+                    this->player.setPosition_Y(this->player.getPosition_Y()+1); 
+                    //cout << "ça marche"<< endl;
+
                 }
-                else if (Key->keyval == GDK_KEY_Left && X_C != 0) {
-                    X_C = X_C - 1;
-                    Y_C = Y_C; 
-                    cout << "ça marche"<< endl;
+                else if (Key->keyval == GDK_KEY_Left && this->player.getPosition_X() != 0) {
+
+                    this->player.setPosition_X(this->player.getPosition_X()-1);
+                    //cout << "ça marche"<< endl;
+
                 }
-                else if (Key->keyval == GDK_KEY_Right && X_C != (l->getLength()-1)) {
-                    X_C = X_C + 1;
-                    Y_C = Y_C;
-                    cout << "ça marche"<< endl;
+                else if (Key->keyval == GDK_KEY_Right && this->player.getPosition_X() != (l.getLength()-1)) {
+
+                    this->player.setPosition_X(this->player.getPosition_X()+1);
+                    //cout << "ça marche"<< endl;
+
                 } 
             }
 
             return true;
         }
+*/
 
+        /*
 
         bool on_key_press_event(GdkEventKey* event) override{
 
             this->Key = event;
             this->begin = true;
-            queue_draw();
 
-            //On marque la fin du jeu
-            if(X_C ==l->getLength() && Y_C==l->getWidth()) this->end = true;
+
+            queue_draw();
 
             return true ;
         }
-        
-
-
-        
+        */
+       
 };

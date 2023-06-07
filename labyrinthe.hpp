@@ -28,6 +28,12 @@ class labyrinthe: public graph{
         //Rôle : retourne la size du tableau
         int getSize()const ;
 
+        //Rôle : entrer la longueur du labyrinthe
+        void setLength(int l) ;
+
+        //Rôle : entrer la largeur du labyrinthe
+        void setWidth(int w) ;
+
         //Rôle : retourne un bloc présent dans notre labyrinthe
         virtual block *getBlock(int ID) override {
             return all_block[ID] ;
@@ -36,11 +42,6 @@ class labyrinthe: public graph{
         //Rôle : retourne le chemin entre 2 cellules
         virtual edge *getEdge(int sID,int dID) override{
             return road[pair(sID,dID)] ;
-        }
-
-        virtual vector<int> getTrajet(int x) override {
-            
-            return Chemins[x];
         }
 
         virtual void addEdge(edge *e) override {
@@ -62,12 +63,6 @@ class labyrinthe: public graph{
         
         }
 
-        //Rôle: ajoute un point dans la map de chemin
-        virtual void SetTrajet(int x_p,vector<int> t) override {
-            
-            //Chemins[x_p] = getBlock(x_p) ;
-            Chemins[x_p] = t;
-        }
 
         //Rôle : dessine le labyrinthe sur la sortie standard
         virtual string toString() override {

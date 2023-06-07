@@ -1,31 +1,27 @@
 #include "character.hpp"
 
-string character::getName()const{
-    return name ;
+int character::getPosition_X()const{
+    return position_X ;
 }
 
-int character::getPosition()const{
-    return position ;
+int character::getPosition_Y()const{
+    return position_Y ;
 }
 
-void character::setPosition(int p){
-    position = p ;
+void character::setPosition_X(int p){
+    position_X = p ;
 }
 
-void character::move(int order,int width){
-    assert(order>=0 && order<4) ;
-
-    if(order==0 && position+1<width*width) setPosition(position++ );
-    if(order==1 && position+width<width*width) setPosition(position+width) ;
-    if(order==2 && position-1>=0) setPosition(position--) ;
-    if(order==3 && position-width>=0) setPosition(position-width ) ;
+void character::setPosition_Y(int p){
+    position_Y = p ;
 }
+
+
 
 string character::toString()const{
-    ostringstream ss ;
 
-    ss<< "the character :"<<getName()<<endl ;
-    ss<< " his position :"<<getPosition()<<endl ;
+    ostringstream ss ;
+    ss<< " his position :"<<"X = "<<getPosition_X()<<", Y = "<<getPosition_Y()<<endl ;
 
     return ss.str() ;
 }

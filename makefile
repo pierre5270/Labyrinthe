@@ -19,7 +19,7 @@ OBJ_DIR := build/ # Répertoires des fichiers objets
 BIN_DIR := bin/
 
 # les fichiers sources
-SRC = main.cpp labyrinthe.cpp character.cpp block.cpp edge.cpp GameState.cpp GridGame.cpp Vue.cpp Controleur.cpp
+SRC = main.cpp labyrinthe.cpp character.cpp block.cpp edge.cpp GameState.cpp Controleur.cpp
 
 PROG = laby_Gtk   # nom de l'exécutable
 OBJS = $(SRC:.cpp=.o) # les .o qui en découlent
@@ -31,15 +31,14 @@ all: $(PROG)
 $(PROG): $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-main.cpp : labyrinthe.hpp
+main.cpp : Controleur.hpp
 labyrinthe.cpp : labyrinthe.hpp graph.hpp character.hpp
 block.cpp : block.hpp edge.hpp
 edge.cpp : edge.hpp
 character.cpp : character.hpp
-GridGame.cpp : GridGame.hpp labyrinthe.hpp
 GameState.cpp : GameState.hpp
-Vue.cpp : Vue.hpp GameState.hpp
-Controleur.cpp : Controleur.hpp labyrinthe.hpp Vue.hpp
+Vue.cpp : Vue.hpp GameState.hpp GridGame.hpp
+Controleur.cpp : Controleur.hpp Modele.hpp Vue.hpp
 
 # le lien entre .o et -c
 # $< dernière dépendance

@@ -7,20 +7,26 @@ using namespace std ;
 
 class character{
     protected :
-        string name ;
-        int position ;
+        
+        int position_X ;
+        int position_Y ;
     
     public :
-        character(string n = "joueur"){};
-    public :
 
-        string getName()const ;
+    //Constructeur
+        character(){
+            //Initialisation de la position du joueur
+            this->setPosition_X(0);
+            this->setPosition_Y(0);
+        }
+        
+        int getPosition_X()const ;
 
-        int getPosition()const ;
+        int getPosition_Y()const ;
 
-        void setPosition(int p) ;
+        void setPosition_X(int p) ;
 
-        void move(int order,int size) ;
+        void setPosition_Y(int p) ;
 
         string toString()const ;
 

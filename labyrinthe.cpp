@@ -87,6 +87,13 @@ int labyrinthe::getSize()const {
     return this->size;
 }
 
+void labyrinthe::setLength(int l) {
+    this->length = l ;
+}
+
+void labyrinthe::setWidth(int w) {
+    this->width = w ;
+}
 
 
 
@@ -314,8 +321,7 @@ void labyrinthe::print_V_wall(){
              if(cord(i,j)>=length){
                 string s = (getEdge(cord(i-1,j),cord(i,j))->isopen()&&getEdge(cord(i,j),cord(i-1,j))->isopen())?"1":"0" ;
                 ss << setw(2) << s << " " ;
-            }
-            
+            }  
         }
         ss << endl ;
     }
@@ -331,11 +337,9 @@ void labyrinthe::print_H_wall(){
              if(1){
                 string s = (getEdge(cord(i,j),cord(i,j+1))->isopen()&&getEdge(cord(i,j+1),cord(i,j))->isopen())?"1":"0" ;
                 ss << setw(2) << s << " " ;
-            }
-            
+            }  
         }
         ss << endl ;
     }
     cout << ss.str() ;
 }
-

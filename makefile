@@ -4,7 +4,7 @@ CC := g++
 #Option de compilation
 GTKMM_CF = $(shell pkg-config gtkmm-3.0 --cflags)
 GTKMM_LD = $(shell pkg-config gtkmm-3.0 --libs)
-CFLAGS = $(GTKMM_CF) -Wall -fconcepts # les options du compilateur
+CFLAGS = $(GTKMM_CF) -Wall -pedantic # les options du compilateur
 LDFLAGS = $(GTKMM_LD)      # les options pour l’éditeur de liens
 
 # Répertoires des fichiers sources

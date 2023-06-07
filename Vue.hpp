@@ -24,9 +24,10 @@ class Vue : public Gtk::Window {
         GridGame *grid;
 
     public :
-        Vue() : box(Gtk::ORIENTATION_VERTICAL), button(new Gtk::Button[2]), entry(new Gtk::Entry[3]),Algo(new Gtk::ToggleButton[2]){
+        Vue() : box(Gtk::ORIENTATION_VERTICAL), button(new Gtk::Button[2]),Algo(new Gtk::ToggleButton[2]), entry(new Gtk::Entry[3]){
 
-
+            G_info = Gamestate();
+            grid = new GridGame();
             //On crée la box d'entrée du programme
             this->set_default_size(X_DEFAUT_SIZE, Y_DEFAUT_SIZE);
             this->set_title("Bienvenue dans le jeu du labyrinthe !!");

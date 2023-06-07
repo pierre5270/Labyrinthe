@@ -155,7 +155,7 @@ bool Controleur::on_draw(const Cairo::RefPtr<Cairo::Context>& cr){
     cr->fill();
 
     //Dessin de la porte d'arrivée
-    Glib::RefPtr<Gdk::Pixbuf> image = Gdk::Pixbuf::create_from_file("exit.png");
+    Glib::RefPtr<Gdk::Pixbuf> image = Gdk::Pixbuf::create_from_file("pictures/exit.png");
     Glib::RefPtr<Gdk::Pixbuf> scaledImage = image->scale_simple(cell_x, cell_y, Gdk::INTERP_BILINEAR);
     Gdk::Cairo::set_source_pixbuf(cr,scaledImage, X_GRID-cell_x, Y_GRID-cell_y);
     cr->paint();
@@ -178,7 +178,7 @@ bool Controleur::on_draw(const Cairo::RefPtr<Cairo::Context>& cr){
 
 
     //Création du personnage
-    image = Gdk::Pixbuf::create_from_file("link.png");
+    image = Gdk::Pixbuf::create_from_file("pictures/link.png");
     scaledImage = image->scale_simple(cell_x, cell_y, Gdk::INTERP_BILINEAR);
     Gdk::Cairo::set_source_pixbuf(cr,scaledImage, cell_x*this->m_->getPos_X(), cell_y*this->m_->getPos_Y());
     cr->paint();

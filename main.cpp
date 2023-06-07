@@ -24,7 +24,7 @@ int main (int argc,char *argv[]){
     Vue *v = new Vue ();
     Controleur *C = new Controleur(m,v);
     
-    return app->run(*v) ;
+    return app->run(*C->VueGraphique()) ;
 
     return EXIT_SUCCESS ;
 }

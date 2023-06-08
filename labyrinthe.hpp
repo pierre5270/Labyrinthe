@@ -178,7 +178,7 @@ class labyrinthe: public graph{
             cout << "Length of the path :" << to_string(path_counter) << endl;
             cout <<end_result.str()<< endl  ;
             
-}
+        }
 
         
 
@@ -203,6 +203,15 @@ class labyrinthe: public graph{
         //Rôle : retourne la liste des blocs de la grille
         vector<block*> Blocklist() ;
 
+        //Rôle : retourne la liste des murs ouverts
+        vector<pair<int,int>> EraseWall() ;
+
+        //Rôle:Retourne la liste des murs verticaux
+        vector<pair<int,int>> V_walls();
+
+        //Rôle:Retourne la liste des murs verticaux
+        vector<pair<int,int>> H_walls();
+
         //Rôle : créer une liste de d'identifiants adjacent à un bloc
         vector<int> adjacent_list_ID(int ID) ;
 
@@ -219,10 +228,10 @@ class labyrinthe: public graph{
         int nbVisited();
 
         //Rôle : génère le labyrinthe à partir de l'algorithme de fusion
-        void fusion_labyrinth() ;
+        labyrinthe fusion_labyrinth() ;
 
         //Rôle : génère le labyrinthe à partir de l'algorithme d'Aldous-Broder
-        void aldous_broder_labyrinth() ;
+        labyrinthe aldous_broder_labyrinth() ;
 
         //Rôle : Opérateur écrivant sur la sortie standard
         friend ostream &operator<<(ostream &f, labyrinthe l){

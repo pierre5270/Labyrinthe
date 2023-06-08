@@ -86,6 +86,10 @@ void Controleur::on_game(){
         this->interface->G_info.SetNom(this->interface->entry[0].get_text());
         this->m_->setDim_X(stoi(this->interface->entry[1].get_text()));
         this->m_->setDim_Y(stoi(this->interface->entry[2].get_text()));
+
+        labyrinthe l = (!this->interface->G_info.isAlgo())? labyrinthe(this->m_->getDim_X(),this->m_->getDim_Y()).fusion_labyrinth() : labyrinthe(this->m_->getDim_X(),this->m_->getDim_Y()).aldous_broder_labyrinth();
+        this->m_->setLabyrinthe(l);
+        
         
 
         //On efface la fenêtre actuelle et on en affiche une nouvelle
@@ -121,9 +125,10 @@ Gtk::Box* Controleur::grid_mode(GridGame *g){
     //Gestion des évènements
     this->interface->grid->signal_draw().connect(sigc::mem_fun(*this,&Controleur::on_draw));
     this->interface->grid->signal_key_press_event().connect(sigc::mem_fun(*this ,&Controleur::on_key_press_event));
+    this->interface->grid->signal_key_release_event().connect(sigc::mem_fun(*this, &Controleur::on_key_release_event));
     Bclose->signal_clicked().connect([&](){this->interface->close();});
     Btips->signal_clicked().connect([&](){this->solution();});
-    g->signal_draw().connect(sigc::mem_fun(*this, &Controleur::on_draw_end));
+    //this->interface->signal_key_press_event().connect(sigc::mem_fun(*this, &Controleur::on_draw_end));
     //this->game_area = game_area ;
 
     return box;
@@ -154,14 +159,16 @@ bool Controleur::on_draw(const Cairo::RefPtr<Cairo::Context>& cr){
     cr->rectangle(cell_x/4,cell_y/4,cell_x/2,cell_y/2);
     cr->fill();
 
+    
     //Dessin de la porte d'arrivée
     Glib::RefPtr<Gdk::Pixbuf> image = Gdk::Pixbuf::create_from_file("pictures/exit.png");
     Glib::RefPtr<Gdk::Pixbuf> scaledImage = image->scale_simple(cell_x, cell_y, Gdk::INTERP_BILINEAR);
     Gdk::Cairo::set_source_pixbuf(cr,scaledImage, X_GRID-cell_x, Y_GRID-cell_y);
     cr->paint();
+    
 
     //Dessin du grillage
-    cr->set_source_rgb(0.5, 0.5, 0.5);
+    cr->set_source_rgb(0.5, 0.5, 0.5); // Couleur grise
     for (int x = 0; x < X_GRID; x += cell_x) {
         cr->move_to(x, 0);
         cr->line_to(x, Y_GRID);
@@ -176,8 +183,48 @@ bool Controleur::on_draw(const Cairo::RefPtr<Cairo::Context>& cr){
     }
     cr->line_to(X_GRID, Y_GRID);
 
+    labyrinthe l = this->m_->getLabyrinthe() ;
+    vector<pair<int,int>> erasewalls = this->m_->getLabyrinthe().EraseWall() ;
+    cr->set_operator(Cairo::OPERATOR_CLEAR);
+    block *b1 ;
 
-    //Création du personnage
+    
+    for( auto it = erasewalls.begin();it!=erasewalls.end();it++){
+
+        b1 = l.getBlock(it->first);
+
+       if((it->first-it->second)==-1){
+            cr->move_to(cell_x*(b1->getX()+1),cell_y*b1->getY());
+            cr->line_to(cell_x*(b1->getX()+1),cell_y*(b1->getY()+1));
+            cr->stroke();
+            if(b1->getY()==l.getWidth()-1){
+                cr->move_to(cell_x*(b1->getX()+1),cell_y*b1->getY());
+                cr->line_to(cell_x*(b1->getX()+1),cell_y*(b1->getY()-1));
+                cr->stroke();                
+            }
+        } else {
+            cr->move_to(cell_x*b1->getX(),cell_y*(b1->getY()+1));
+            cr->line_to(cell_x*(b1->getX()+1),cell_y*(b1->getY()+1));
+            cr->stroke();
+            if(b1->getX()==l.getLength()){
+                cr->move_to(cell_x*b1->getX(),cell_y*(b1->getY()+1));
+                cr->line_to(cell_x*(b1->getX()-1),cell_y*(b1->getY()+1));
+                cr->stroke();                
+            }
+        }
+    }
+
+    cr->set_operator(Cairo::OPERATOR_OVER);
+
+
+    //Création du personnage ( un cercle rouge)
+    cr->set_source_rgb(1,0,0);
+    int xp= this->m_->getPos_X();
+    int yp = this->m_->getPos_Y();
+    /*
+    cr->arc(xp*cell_x+(cell_x/2),yp*cell_y+(cell_y/2),min(cell_x/2,cell_y/2),0,2*M_PI);
+    cr->fill();*/
+
     image = Gdk::Pixbuf::create_from_file("pictures/link.png");
     scaledImage = image->scale_simple(cell_x, cell_y, Gdk::INTERP_BILINEAR);
     Gdk::Cairo::set_source_pixbuf(cr,scaledImage, cell_x*this->m_->getPos_X(), cell_y*this->m_->getPos_Y());
@@ -187,26 +234,38 @@ bool Controleur::on_draw(const Cairo::RefPtr<Cairo::Context>& cr){
     //Actualise les coordonnées du personnage
     if(this->interface->G_info.can_move()){
         if (this->interface->grid->get_key()->keyval == GDK_KEY_Up && this->m_->getPos_Y()!= 0) {
-                    
-            this->m_->setPos_Y(this->m_->getPos_Y()-1);
-            //cout << "ça marche"<< endl;
+            if(l.getEdge(l.cord(this->m_->getPos_X(),this->m_->getPos_Y()),l.cord(this->m_->getPos_X(),this->m_->getPos_Y()-1))->isopen()){
+                this->m_->setPos_Y(this->m_->getPos_Y()-1);
+                cout << "ça marche_up"<< endl;
+                cout << this->m_->getCharacter() << endl;
+            }        
+            
+            
         }
         else if (this->interface->grid->get_key()->keyval == GDK_KEY_Down && this->m_->getPos_Y() != (this->m_->getDim_Y()-1)) {
-
-            this->m_->setPos_Y(this->m_->getPos_Y()+1); 
-            //cout << "ça marche"<< endl;
+            if(l.getEdge(l.cord(this->m_->getPos_X(),this->m_->getPos_Y()),l.cord(this->m_->getPos_X(),this->m_->getPos_Y()+1))->isopen()){
+                this->m_->setPos_Y(this->m_->getPos_Y()+1);
+                cout << "ça marche_down"<< endl;
+                cout << this->m_->getCharacter() << endl;
+            }
+             
+            
 
         }
         else if (this->interface->grid->get_key()->keyval == GDK_KEY_Left && this->m_->getPos_X() != 0) {
-
-            this->m_->setPos_X(this->m_->getPos_X()-1);
-            //cout << "ça marche"<< endl;
+            if(l.getEdge(l.cord(this->m_->getPos_X(),this->m_->getPos_Y()),l.cord(this->m_->getPos_X()-1,this->m_->getPos_Y()))->isopen()){
+                this->m_->setPos_X(this->m_->getPos_X()-1);
+                cout << "ça marche_left"<< endl;
+                cout << this->m_->getCharacter() << endl;
+            }
 
         }
         else if (this->interface->grid->get_key()->keyval == GDK_KEY_Right && this->m_->getPos_X() != (this->m_->getDim_X()-1)) {
-
-            this->m_->setPos_X(this->m_->getPos_X()+1);
-            //cout << "ça marche"<< endl;
+            if(l.getEdge(l.cord(this->m_->getPos_X(),this->m_->getPos_Y()),l.cord(this->m_->getPos_X()+1,this->m_->getPos_Y()))->isopen()){
+                this->m_->setPos_X(this->m_->getPos_X()+1);
+                cout << "ça marche_right"<< endl;
+                cout << this->m_->getCharacter() << endl;
+            }
 
         } 
     }
@@ -220,19 +279,51 @@ bool Controleur::on_key_press_event(GdkEventKey* event) {
     this->interface->grid->set_key(event);
     this->interface->G_info.begin();
 
+    switch (event->keyval){
+        case GDK_KEY_Up:
+            this->interface->grid->move_up = true;
+            break;
+        case GDK_KEY_Down:
+            this->interface->grid->move_down = true;
+            break;
+        case GDK_KEY_Left:
+            this->interface->grid->move_left = true;
+            break;
+        case GDK_KEY_Right:
+            this->interface->grid->move_right = true;
+            break;
+    }
 
     this->interface->grid->queue_draw();
+
+   
+    if(this->m_->getPos_X() ==this->m_->getDim_X()-1 && this->m_->getPos_Y()==this->m_->getDim_Y()-1){
+        cout << "c'est terminé"<< endl;
+        this->interface->remove();
+        Gtk::Box *box_end = this->interface->Vue::end_mode() ;
+        this->interface->add(*box_end);
+        this->interface->show_all();
+    }
+
 
     return true ;
 }
 
-bool Controleur::on_draw_end(const Cairo::RefPtr<Cairo::Context>& cr){
+bool Controleur::on_key_release_event(GdkEventKey* event){
 
-    if(this->m_->getPos_X() ==this->m_->getDim_X()-1 && this->m_->getPos_Y()==this->m_->getDim_Y()-1){
-        this->interface->remove();
-        Gtk::Box *box_end = this->interface->end_mode() ;
-        this->interface->add(*box_end);
-        this->interface->show_all();
+    switch (event->keyval){
+        case GDK_KEY_Up:
+            this->interface->grid->move_up = false;
+            break;
+        case GDK_KEY_Down:
+            this->interface->grid->move_down = false;
+            break;
+        case GDK_KEY_Left:
+            this->interface->grid->move_left = false;
+            break;
+        case GDK_KEY_Right:
+            this->interface->grid->move_right = false;
+            break;
     }
     return true ;
 }

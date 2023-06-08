@@ -60,4 +60,17 @@ class Modele {
             player.setPosition_Y(pos_y);
         }
 
+        labyrinthe getLabyrinthe() {
+            return this-> l ;
+        }
+
+        character getCharacter() {
+            return this->player ;
+        }
+
+        //Rôle : met à jour le labyrinthe
+        void setLabyrinthe(labyrinthe lab){
+            this->l = lab;
+        }
+
 };

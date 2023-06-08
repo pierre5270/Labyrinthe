@@ -7,7 +7,6 @@ labyrinthe::labyrinthe (int l,int w):length(l), width(w),size(w*l){
     for(int i =0 ; i< l ;i++){
         for(int j = 0 ; j<w ;j++){
             all_block[cord(i,j)] = new block(i,j,cord(i,j)) ;
-            all_block[cord(i,j)]->Setchemin(cord(i,j)) ;
 
             if (i==0){
                 if(j==0){
@@ -180,6 +179,39 @@ vector <pair<int,int>> labyrinthe:: Edgelist() const {
     return edges ;
 }
 
+vector<pair<int,int>> labyrinthe:: EraseWall() {
+    vector<pair<int,int>> walls = Edgelist();
+    vector<pair<int,int>> erasewalls ;
+    for(auto it = walls.begin(); it!=walls.end();it++){
+        if(getEdge(it->first,it->second)->isopen()) erasewalls.push_back(*it);
+    }
+    return erasewalls ;
+}
+
+vector<pair<int,int>> labyrinthe:: H_walls(){
+    vector<pair<int,int>> walls = EraseWall();
+    vector<pair<int,int>> v_walls ;
+
+    for(auto it = walls.begin();it!=walls.end();it++){
+        if((it->first -it->second)==1){
+            v_walls.push_back(*it);
+        }
+    }
+    return v_walls ;
+}
+
+vector<pair<int,int>> labyrinthe::V_walls(){
+    vector<pair<int,int>> walls = EraseWall();
+    vector<pair<int,int>> h_walls ;
+
+    for(auto it = walls.begin();it!=walls.end();it++){
+        if((it->first -it->second)==this->getLength()){
+            h_walls.push_back(*it);
+        }
+    }
+    return h_walls ;
+}
+
 vector<block*> labyrinthe::Blocklist() {
     vector<block*> blocks ;
     for(auto it =all_block.begin();it!=all_block.end();it++)
@@ -235,7 +267,7 @@ vector<int> labyrinthe::adjacent_list_ID(int ID) {
 
 
 
-void labyrinthe::fusion_labyrinth(){
+labyrinthe labyrinthe::fusion_labyrinth(){
     
     cout << "algorithme de fusion" << endl;
     // Initialise un objet de générateur de nombres aléatoires et une distribution uniforme pour sélectionner une case au hasard
@@ -270,12 +302,13 @@ void labyrinthe::fusion_labyrinth(){
 
     cout << "j'ai ouvert :"<<nbwall_opened() << endl;
 
+    return *this ;
 }
 
 
 
 
-void labyrinthe::aldous_broder_labyrinth(){
+labyrinthe labyrinthe::aldous_broder_labyrinth(){
 
     
     cout << "algorithme d'Aldous_Bröder" << endl;
@@ -310,6 +343,8 @@ void labyrinthe::aldous_broder_labyrinth(){
     }   
     cout <<"Done"<<endl;
     cout << "j'ai ouvert :"<<nbwall_opened() << endl;
+
+    return *this ;
 }
 
 void labyrinthe::print_V_wall(){

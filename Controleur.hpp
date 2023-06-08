@@ -14,6 +14,7 @@ class Controleur {
 
         ~Controleur(){}
 
+        //Rôle : Cette fonction permet de retourner l'interface graphique du jeu
         Vue *VueGraphique();
 
         //Cette fonction ouvre la fenêtre de départ comportant les informations à remplir
@@ -37,11 +38,9 @@ class Controleur {
         //Cette fonction dessine la grille de jeu sur l'écran en tenant compte des paramètres de jeu du joueur
         bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
 
+        //Gère les mouvements du clavier et renvoie le fenêtre de fin 
         bool on_key_press_event(GdkEventKey* event) ;
 
-        //renvoie la fenêtre de fin du jeu
-        bool on_draw_end(const Cairo::RefPtr<Cairo::Context>& cr);
-
-        
-
-};
+        //Gère les relachements de boutons du clavier
+        bool on_key_release_event(GdkEventKey* event) ;
+    };
